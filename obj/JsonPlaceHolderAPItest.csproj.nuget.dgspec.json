@@ -1,0 +1,93 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/JsonPlaceHolderAPItest.csproj": {}
+  },
+  "projects": {
+    "/Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/JsonPlaceHolderAPItest.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/JsonPlaceHolderAPItest.csproj",
+        "projectName": "JsonPlaceHolderAPItest",
+        "projectPath": "/Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/JsonPlaceHolderAPItest.csproj",
+        "packagesPath": "/Users/monalisha/.nuget/packages/",
+        "outputPath": "/Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/monalisha/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.12.0, )"
+            },
+            "NUnit": {
+              "target": "Package",
+              "version": "[3.13.3, )"
+            },
+            "NUnit.Analyzers": {
+              "target": "Package",
+              "version": "[4.3.0, )"
+            },
+            "NUnit3TestAdapter": {
+              "target": "Package",
+              "version": "[4.6.0, )"
+            },
+            "RestSharp": {
+              "target": "Package",
+              "version": "[112.1.0, )"
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[6.0.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

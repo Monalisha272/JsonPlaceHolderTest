@@ -116,7 +116,7 @@ namespace JsonPlaceholderApiTests
             Console.WriteLine($"Response Status Code: {response.StatusCode}");
             Console.WriteLine($"Response Content: {response.Content}");
 
-            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode, "Expected status code other than 201.");
+            Assert.AreNotEqual(HttpStatusCode.Created, response.StatusCode, "Expected status code other than 201.");
 
             Console.WriteLine("Test End: Negative POST Request test passed.");
         }
@@ -168,7 +168,7 @@ namespace JsonPlaceholderApiTests
             Console.WriteLine($"Response Status Code: {response.StatusCode}");
             Console.WriteLine($"Response Content: {response.Content}");
 
-            Assert.AreEqual(HttpStatusCode.InternalServerError, response.StatusCode, "Expected status code 404.");
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "Expected status code 404.");
 
             Console.WriteLine("Test End: Negative PUT Request test passed.");
         }
@@ -192,7 +192,7 @@ namespace JsonPlaceholderApiTests
                 response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NoContent,
                 "Expected status code 200 or 204."
             );
-            Assert.That(response.Content.Length, Is.EqualTo(2), "Expected empty response body.");
+            Assert.That(response.Content.Length, Is.EqualTo(0), "Expected empty response body.");
 
             Console.WriteLine("Test End: DELETE Request test passed.");
         }
@@ -209,7 +209,7 @@ namespace JsonPlaceholderApiTests
             Console.WriteLine($"Response Status Code: {response.StatusCode}");
             Console.WriteLine($"Response Content: {response.Content}");
 
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Expected status code 404.");
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "Expected status code 404.");
 
             Console.WriteLine("Test End: Negative DELETE Request test passed.");
         }

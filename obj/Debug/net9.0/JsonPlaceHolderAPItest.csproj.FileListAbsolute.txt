@@ -96,3 +96,14 @@
 /Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/obj/Debug/net9.0/JsonPlaceHolderAPItest.pdb
 /Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/obj/Debug/net9.0/JsonPlaceHolderAPItest.genruntimeconfig.cache
 /Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/obj/Debug/net9.0/ref/JsonPlaceHolderAPItest.dll
+/Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/obj/Debug/net9.0/JsonPlaceHolderAPItest.sourcelink.json
+/Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/bin/Debug/net9.0/NLog.config
+/Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/bin/Debug/net9.0/Microsoft.Extensions.Configuration.Abstractions.dll
+/Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/bin/Debug/net9.0/Microsoft.Extensions.DependencyInjection.dll
+/Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/bin/Debug/net9.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll
+/Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/bin/Debug/net9.0/Microsoft.Extensions.Logging.dll
+/Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/bin/Debug/net9.0/Microsoft.Extensions.Logging.Abstractions.dll
+/Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/bin/Debug/net9.0/Microsoft.Extensions.Options.dll
+/Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/bin/Debug/net9.0/Microsoft.Extensions.Primitives.dll
+/Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/bin/Debug/net9.0/NLog.dll
+/Users/monalisha/Documents/MyProjects/JsonPlaceHolder/JsonPlaceHolderAPItest/bin/Debug/net9.0/NLog.Extensions.Logging.dll

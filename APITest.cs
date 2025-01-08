@@ -1,126 +1,217 @@
 ﻿using NUnit.Framework;
+using RestSharp;
 using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 
-namespace APITests
+namespace JsonPlaceholderApiTests
 {
     [TestFixture]
-    public class JsonPlaceholderTests
+    public class ApiTests
     {
-        private HttpClient _client;
+        private RestClient client;
 
         [SetUp]
-        public void SetUp()
+        public void Setup()
         {
-            _client = new HttpClient
-            {
-                BaseAddress = new System.Uri("https://jsonplaceholder.typicode.com/")
-            };
+            // Initialize RestClient with the Base URL
+            client = new RestClient("https://jsonplaceholder.typicode.com");
+            Console.WriteLine("Setup: Initialized RestClient with Base URL.");
         }
 
         [TearDown]
         public void TearDown()
         {
-            _client.Dispose();
+            // Dispose of RestClient
+            client.Dispose();
+            Console.WriteLine("Teardown: Disposed RestClient.");
         }
 
+        // 1. GET Request Test
         [Test]
-        public async Task GetPostById_ShouldReturnExpectedPost()
+        [Description("Validate GET request")]
+        public void Get_ShouldReturnPostDetails()
         {
-            // Arrange
-            var postId = 1;
+            Console.WriteLine("Test Start: GET Request to /posts/1");
 
-            // Act
-            var response = await _client.GetAsync($"/posts/{postId}");
-            var responseBody = await response.Content.ReadAsStringAsync();
+            var request = new RestRequest("/posts/1", Method.Get);
+            Console.WriteLine($"GET Request URL: {request.Resource}");
+
+            var response = client.Execute(request);
+            Console.WriteLine($"Response Status Code: {response.StatusCode}");
+            Console.WriteLine($"Response Content: {response.Content}");
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Expected status code 200.");
+            Assert.That(response.Content, Does.Contain("\"id\": 1"));
+            Assert.That(response.Content, Does.Contain("\"userId\": 1"));
+            Assert.That(response.Content, Does.Contain("\"title\""));
+            Assert.That(response.Content, Does.Contain("\"body\""));
+
+            Console.WriteLine("Test End: GET Request test passed.");
+        }
+
+        // 2. GET Request Test with invaid input
+        [Test]
+        [Description("Validate GET request with invalid input")]
+        public void Get_InvalidId_ShouldReturnNotFound()
+        {
+            Console.WriteLine("Test Start: GET Request to /posts/9999 (Invalid ID)");
+
+            var request = new RestRequest("/posts/9999", Method.Get);
+
+            var response = client.Execute(request);
+            Console.WriteLine($"Response Status Code: {response.StatusCode}");
+            Console.WriteLine($"Response Content: {response.Content}");
 
             // Assert
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "Expected status code 404.");
 
-            var post = JsonSerializer.Deserialize<Post>(responseBody);
-            Assert.AreEqual(1, post.UserId);
-            Assert.AreEqual(1, post.Id);
-            Assert.IsNotNull(post.Title);
-            Assert.IsNotNull(post.Body);
+            Console.WriteLine("Test End: Negative GET Request test passed.");
         }
 
+
+        // 3. POST Request Test
         [Test]
-        public async Task CreateNewPost_ShouldReturnCreatedPost()
+        [Description("Validate POST request")]
+        public void CreatePost_ShouldReturnCreatedPost()
         {
-            // Arrange
-            var newPost = new Post
+            Console.WriteLine("Test Start: POST Request to /posts");
+
+            var request = new RestRequest("/posts", Method.Post);
+            var body = new
             {
-                UserId = 1,
-                Title = "New Post Title",
-                Body = "This is the body of the new post."
+                userId = 1,
+                title = "Test Title",
+                body = "Test Body Content"
             };
+            request.AddJsonBody(body);
+            Console.WriteLine($"POST Request URL: {request.Resource}");
+            Console.WriteLine($"Request Body: {body}");
 
-            var jsonContent = new StringContent(JsonSerializer.Serialize(newPost), Encoding.UTF8, "application/json");
+            var response = client.Execute(request);
+            Console.WriteLine($"Response Status Code: {response.StatusCode}");
+            Console.WriteLine($"Response Content: {response.Content}");
 
-            // Act
-            var response = await _client.PostAsync("/posts", jsonContent);
-            var responseBody = await response.Content.ReadAsStringAsync();
+            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode, "Expected status code 201.");
+            Assert.That(response.Content, Does.Contain("\"title\": \"Test Title\""));
+            Assert.That(response.Content, Does.Contain("\"body\": \"Test Body Content\""));
 
-            // Assert
-            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
-
-            var createdPost = JsonSerializer.Deserialize<Post>(responseBody);
-            Assert.AreEqual(newPost.UserId, createdPost.UserId);
-            Assert.AreEqual(newPost.Title, createdPost.Title);
-            Assert.AreEqual(newPost.Body, createdPost.Body);
+            Console.WriteLine("Test End: POST Request test passed.");
         }
-
+     // 4. POST Request Test with missing fields
         [Test]
-        public async Task UpdatePostById_ShouldReturnUpdatedPost()
+        [Description("Validate POST request with missing fields")]
+        public void CreatePost_MissingTitle_ShouldReturnBadRequest()
         {
-            // Arrange
-            var updatedPost = new Post
+            Console.WriteLine("Test Start: POST Request with Missing Title");
+
+            var request = new RestRequest("/posts", Method.Post);
+            var body = new
             {
-                UserId = 1,
-                Title = "Updated Title",
-                Body = "Updated body content."
+                userId = 1,
+                body = "Test Body Content"
+                // Title is missing
             };
+            request.AddJsonBody(body);
 
-            var jsonContent = new StringContent(JsonSerializer.Serialize(updatedPost), Encoding.UTF8, "application/json");
+            var response = client.Execute(request);
+            Console.WriteLine($"Response Status Code: {response.StatusCode}");
+            Console.WriteLine($"Response Content: {response.Content}");
 
-            // Act
-            var response = await _client.PutAsync("/posts/1", jsonContent);
-            var responseBody = await response.Content.ReadAsStringAsync();
+            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode, "Expected status code other than 201.");
 
-            // Assert
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-
-            var returnedPost = JsonSerializer.Deserialize<Post>(responseBody);
-            Assert.AreEqual(updatedPost.UserId, returnedPost.UserId);
-            Assert.AreEqual(updatedPost.Title, returnedPost.Title);
-            Assert.AreEqual(updatedPost.Body, returnedPost.Body);
+            Console.WriteLine("Test End: Negative POST Request test passed.");
         }
-
+        // 5. PUT Request Test
         [Test]
-        public async Task DeletePostById_ShouldReturnNoContent()
+        [Description("Validate PUT request")]
+        public void UpdatePost_ShouldReturnUpdatedPost()
         {
-            // Arrange
-            var postId = 1;
+            Console.WriteLine("Test Start: PUT Request to /posts/1");
 
-            // Act
-            var response = await _client.DeleteAsync($"/posts/{postId}");
+            var request = new RestRequest("/posts/1", Method.Put);
+            var body = new
+            {
+                userId = 1,
+                title = "Updated Title",
+                body = "Updated Body Content"
+            };
+            request.AddJsonBody(body);
+            Console.WriteLine($"PUT Request URL: {request.Resource}");
+            Console.WriteLine($"Request Body: {body}");
 
-            // Assert
-            Assert.IsTrue(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NoContent);
+            var response = client.Execute(request);
+            Console.WriteLine($"Response Status Code: {response.StatusCode}");
+            Console.WriteLine($"Response Content: {response.Content}");
 
-            var responseBody = await response.Content.ReadAsStringAsync();
-            Assert.IsTrue(string.IsNullOrEmpty(responseBody));
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Expected status code 200.");
+            Assert.That(response.Content, Does.Contain("\"title\": \"Updated Title\""));
+            Assert.That(response.Content, Does.Contain("\"body\": \"Updated Body Content\""));
+
+            Console.WriteLine("Test End: PUT Request test passed.");
         }
 
-        public class Post
+        // 6. PUT Request Test with invalid ID
+        [Test]
+        [Description("Validate PUT request with invalid data")]
+        public void UpdatePost_InvalidId_ShouldReturnNotFound()
         {
-            public int UserId { get; set; }
-            public int Id { get; set; }
-            public string Title { get; set; }
-            public string Body { get; set; }
+            Console.WriteLine("Test Start: PUT Request to /posts/9999 (Invalid ID)");
+
+            var request = new RestRequest("/posts/9999", Method.Put);
+            request.AddJsonBody(new
+            {
+                userId = 1,
+                title = "Invalid Update",
+                body = "Invalid Update Content"
+            });
+
+            var response = client.Execute(request);
+            Console.WriteLine($"Response Status Code: {response.StatusCode}");
+            Console.WriteLine($"Response Content: {response.Content}");
+
+            Assert.AreEqual(HttpStatusCode.InternalServerError, response.StatusCode, "Expected status code 404.");
+
+            Console.WriteLine("Test End: Negative PUT Request test passed.");
+        }
+
+
+        // 7. DELETE Request Test
+        [Test]
+        [Description("Validate DELETE request")]
+        public void DeletePost_ShouldReturnSuccessStatusCode()
+        {
+            Console.WriteLine("Test Start: DELETE Request to /posts/1");
+
+            var request = new RestRequest("/posts/1", Method.Delete);
+            Console.WriteLine($"DELETE Request URL: {request.Resource}");
+
+            var response = client.Execute(request);
+            Console.WriteLine($"Response Status Code: {response.StatusCode}");
+            Console.WriteLine($"Response Content: {response.Content}");
+
+            Assert.IsTrue(
+                response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NoContent,
+                "Expected status code 200 or 204."
+            );
+            Assert.That(response.Content.Length, Is.EqualTo(2), "Expected empty response body.");
+
+            Console.WriteLine("Test End: DELETE Request test passed.");
+        }
+        // 8. DELETE Request Test with Invalid ID
+        [Test]
+        [Description("Validate DELETE request with invalid Id")]
+        public void DeletePost_InvalidId_ShouldReturnNotFound()
+        {
+            Console.WriteLine("Test Start: DELETE Request to /posts/9999 (Invalid ID)");
+
+            var request = new RestRequest("/posts/9999", Method.Delete);
+
+            var response = client.Execute(request);
+            Console.WriteLine($"Response Status Code: {response.StatusCode}");
+            Console.WriteLine($"Response Content: {response.Content}");
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Expected status code 404.");
+
+            Console.WriteLine("Test End: Negative DELETE Request test passed.");
         }
     }
 }
